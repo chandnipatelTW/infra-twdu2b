@@ -1,0 +1,17 @@
+{
+    "hosts": [],
+    "key": {
+        "algo": "rsa",
+        "size": 2048
+    },
+    "names": [
+        {
+            "C": "IN",
+            "L": "Pune",
+            "O": "TWDU",
+            "OU": "OpenVPN",
+            "ST": "Pune"
+        }
+    ],
+    "CN": "%COMMONNAME%"
+}
