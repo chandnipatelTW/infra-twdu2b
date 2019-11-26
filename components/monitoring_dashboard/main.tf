@@ -161,6 +161,24 @@ resource "aws_cloudwatch_dashboard" "main" {
                     }
                 }
             }
+        },
+        {
+            "type": "metric",
+            "x": 0,
+            "y": 15,
+            "width": 12,
+            "height": 3,
+            "properties": {
+                "metrics": [
+                    [ "2Wheelers_DeliveryFile", "file-exists", "Instance", "j-3GR8OE0FH0VLQ" ],
+                    [ ".", "file-updated", ".", "." ]
+                ],
+                "view": "singleValue",
+                "title": "Delivery File",
+                "region": "${var.aws_region}",
+                "stat": "p99",
+                "period": 300
+            }
         }
     ]
 }
