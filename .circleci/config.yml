@@ -17,8 +17,10 @@ jobs:
    - checkout
    - run:
        command: source /okta_venv/bin/activate;
-               ./scripts/create_tf_state_bucket.sh $TRAINING_COHORT;
-               ./scripts/create_key_pair.sh $TRAINING_COHORT;
+   - run:
+       command: ./scripts/create_tf_state_bucket.sh $TRAINING_COHORT;
+   - run:
+       command: ./scripts/create_key_pair.sh $TRAINING_COHORT;
 
  buildProductionEnvironment:
      <<: *defaults
