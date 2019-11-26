@@ -1,6 +1,6 @@
 defaults: &defaults
   docker:
-  - image: timjdfletcher/infrabox
+  - image: twdu2b/infrabox
   working_directory: /home/circleci/project
 
 version: 2
