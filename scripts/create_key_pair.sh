@@ -20,9 +20,14 @@ fi
 COHORT=$1
 KEY_NAME="tw-dataeng-${COHORT}"
 
-KEY_VALUE=$(aws ec2 create-key-pair \
-    --key-name $KEY_NAME --query 'KeyMaterial' \
-    --output text)
+KEY_VALUE=$(aws ec2 describe-key-pairs --key-names $KEY_NAME)
+
+if [ -z "$KEY_VALUE" ]
+then
+      KEY_VALUE=$(aws ec2 create-key-pair \
+      --key-name $KEY_NAME --query 'KeyMaterial' \
+      --output text)
+fi
 
 aws ssm put-parameter \
     --name $KEY_NAME \
