@@ -76,22 +76,31 @@ jobs:
 workflows:
   version: 2
   build:
-    branches:
-        only:
-            - test-env
     jobs:
       - dummy
 
       - approvefirstTimeSetup:
           type: approval
+          filter:
+            branches:
+                only:
+                    - test-env
           requires:
             - dummy
       - firstTimeSetup:
+          filter:
+            branches:
+                only:
+                    - test-env  
           requires:
             - approvefirstTimeSetup
 
       - approvebuildAMIs:
           type: approval
+          filter:
+            branches:
+                only:
+                    - test-env
           requires:
             - dummy
       - buildAMIs:
@@ -100,24 +109,48 @@ workflows:
 
       - approveBuildProductionEnvironment:
           type: approval
+          filter:
+            branches:
+                only:
+                    - test-env
           requires:
             - dummy
       - buildProductionEnvironment:
+          filter:
+            branches:
+                only:
+                    - test-env
           requires:
             - approveBuildProductionEnvironment
 
       - approvebuildClientVPN:
           type: approval
+          filter:
+            branches:
+                only:
+                    - test-env
           requires:
             - dummy
       - buildClientVPN:
+          filter:
+            branches:
+                only:
+                    - test-env  
           requires:
             - approvebuildClientVPN
 
       - approveDestroyProductionEnvironment:
           type: approval
+          filter:
+            branches:
+                only:
+                    - test-env
           requires:
             - dummy
       - destroyProductionEnvironment:
+          filter:
+            branches:
+                only:
+                    - test-env
           requires:
             - approveDestroyProductionEnvironment
