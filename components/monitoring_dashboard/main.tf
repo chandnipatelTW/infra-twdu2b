@@ -167,10 +167,10 @@ resource "aws_cloudwatch_dashboard" "main" {
             "x": 0,
             "y": 15,
             "width": 12,
-            "height": 3,
+            "height": 6,
             "properties": {
                 "metrics": [
-                    [ "2Wheelers_DeliveryFile", "file-exists", "Instance", "j-3GR8OE0FH0VLQ" ],
+                    [ "2Wheelers_DeliveryFile", "file-exists", "Instance", "${data.terraform_remote_state.ingester.ingester_instance_id}" ],
                     [ ".", "file-updated", ".", "." ]
                 ],
                 "view": "singleValue",
@@ -178,6 +178,26 @@ resource "aws_cloudwatch_dashboard" "main" {
                 "region": "${var.aws_region}",
                 "stat": "p99",
                 "period": 300
+            }
+        },
+        {
+            "type": "metric",
+            "x": 12,
+            "y": 15,
+            "width": 12,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    [ "AWS/Events", "TriggeredRules", "RuleName", "emr_step_failures", { "label": "EMR Step Failures" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "title": "EMR Step Failures",
+                "region": "${var.aws_region}",
+                "stat": "Sum",
+                "period": 300,
+                "start": "-PT3H",
+                "end": "P0D"
             }
         }
     ]
