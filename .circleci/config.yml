@@ -85,14 +85,10 @@ workflows:
       - buildAMIs:
           requires:
             - firstTimeSetup
-
-      - approveBuildProductionEnvironment:
-          type: approval
-          requires:
-            - buildAMIs
+            - 
       - buildProductionEnvironment:
           requires:
-            - approveBuildProductionEnvironment
+            - buildAMIs
 
       - buildClientVPN:
           requires:
