@@ -28,7 +28,7 @@ data "terraform_remote_state" "bastion" {
 module "training_cluster" {
   source = "../../modules/training_emr_cluster"
 
-  deployment_identifier     = "data-eng-${var.cohort}"
+  deployment_identifier     = "data-eng-${var.cohort}-${var.env}"
   ec2_key_pair              = "tw-dataeng-${var.cohort}"
   vpc_id                    = "${data.terraform_remote_state.base_networking.vpc_id}"
   subnet_id                 = "${data.terraform_remote_state.base_networking.private_subnet_ids[0]}"

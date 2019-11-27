@@ -5,3 +5,7 @@ variable "cohort" {
 variable "aws_region" {
   description = "Region in which to build resources."
 }
+
+variable "env" {
+  description = "Environment"
+}

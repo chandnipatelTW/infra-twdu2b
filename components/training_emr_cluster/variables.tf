@@ -14,3 +14,7 @@ variable "emr_cluster" {
     "core_count"  = "2"
   }
 }
+
+variable "env" {
+  description = "Environment"
+}

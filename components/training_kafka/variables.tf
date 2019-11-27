@@ -12,3 +12,8 @@ variable "kafka" {
     instance_type = "t2.medium"
   }
 }
+
+variable "env" {
+  description = "Environment"
+}
+

@@ -12,3 +12,8 @@ variable "ingester" {
     instance_type = "t2.micro"
   }
 }
+
+variable "env" {
+  description = "Environment"
+}
+
