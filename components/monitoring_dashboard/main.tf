@@ -162,24 +162,24 @@ resource "aws_cloudwatch_dashboard" "main" {
                 }
             }
         },
-        {	
-            "type": "metric",	
-            "x": 0,	
-            "y": 15,	
-            "width": 12,	
-            "height": 6,	
-            "properties": {	
-                "metrics": [	
-                    [ "2Wheelers_DeliveryFile", "file-exists", "Instance", "${data.terraform_remote_state.ingester.ingester_instance_id}" ],	
-                    [ ".", "file-updated", ".", "." ]	
-                ],	
-                "view": "singleValue",	
-                "title": "Delivery File",	
-                "region": "${var.aws_region}",	
-                "stat": "p99",	
-                "period": 300	
-            }	
-        },	
+        {
+            "type": "metric",
+            "x": 0,
+            "y": 15,
+            "width": 12,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    [ "2Wheelers_DeliveryFile", "file-exists", { "label": "file-exists (0 = no, 1 = yes)" } ],
+                    [ ".", "file-updated", { "label": "file-updated (0 = no, 1 = yes)" } ]
+                ],
+                "view": "singleValue",
+                "title": "Delivery File",
+                "region": "ap-southeast-1",
+                "stat": "p99",
+                "period": 60
+            }
+        },
         {	
             "type": "metric",	
             "x": 12,	
