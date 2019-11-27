@@ -85,7 +85,7 @@ workflows:
       - buildAMIs:
           requires:
             - firstTimeSetup
-            - 
+
       - buildProductionEnvironment:
           requires:
             - buildAMIs
