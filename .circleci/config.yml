@@ -57,7 +57,6 @@ jobs:
                  ./scripts/build_ami.sh training_kafka ;
                  ./scripts/build_ami.sh training_ingester ;
                  ./scripts/build_ami.sh training_airflow ;
-                 ./scripts/bootstrap_rds.sh $TRAINING_COHORT airflow ;
 
  destroyProductionEnvironment:
      <<: *defaults
