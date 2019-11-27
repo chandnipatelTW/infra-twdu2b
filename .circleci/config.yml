@@ -81,14 +81,14 @@ workflows:
 
       - approvefirstTimeSetup:
           type: approval
-          filter:
+          filters:
             branches:
                 only:
                     - test-env
           requires:
             - dummy
       - firstTimeSetup:
-          filter:
+          filters:
             branches:
                 only:
                     - test-env  
@@ -97,7 +97,7 @@ workflows:
 
       - approvebuildAMIs:
           type: approval
-          filter:
+          filters:
             branches:
                 only:
                     - test-env
@@ -109,14 +109,14 @@ workflows:
 
       - approveBuildProductionEnvironment:
           type: approval
-          filter:
+          filters:
             branches:
                 only:
                     - test-env
           requires:
             - dummy
       - buildProductionEnvironment:
-          filter:
+          filters:
             branches:
                 only:
                     - test-env
@@ -125,14 +125,14 @@ workflows:
 
       - approvebuildClientVPN:
           type: approval
-          filter:
+          filters:
             branches:
                 only:
                     - test-env
           requires:
             - dummy
       - buildClientVPN:
-          filter:
+          filters:
             branches:
                 only:
                     - test-env  
@@ -141,14 +141,14 @@ workflows:
 
       - approveDestroyProductionEnvironment:
           type: approval
-          filter:
+          filters:
             branches:
                 only:
                     - test-env
           requires:
             - dummy
       - destroyProductionEnvironment:
-          filter:
+          filters:
             branches:
                 only:
                     - test-env
