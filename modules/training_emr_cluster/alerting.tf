@@ -5,7 +5,7 @@ resource "aws_cloudwatch_metric_alarm" "file_does_not_exist" {
   metric_name               = "file-exists"
   namespace                 = "2Wheelers_DeliveryFile"
   period                    = "300"
-  statistic                 = "p99"
+  extended_statistic        = "p99"
   threshold                 = "1"
   alarm_description         = "Monitors the existance of a delivery file"
   insufficient_data_actions = []
@@ -18,7 +18,7 @@ resource "aws_cloudwatch_metric_alarm" "file_not_updated" {
   metric_name               = "file-updated"
   namespace                 = "2Wheelers_DeliveryFile"
   period                    = "300"
-  statistic                 = "p99"
+  extended_statistic        = "p99"
   threshold                 = "1"
   alarm_description         = "Monitors the delivery file having been updated"
   insufficient_data_actions = []
