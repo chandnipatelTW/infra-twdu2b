@@ -8,7 +8,7 @@ provider "aws" {
 }
 
 locals {
-  deployment_identifier = "data-eng-${var.cohort}"
+  deployment_identifier = "data-eng-${var.cohort}${var.env}"
 }
 
 resource "aws_s3_bucket" "training_data" {
