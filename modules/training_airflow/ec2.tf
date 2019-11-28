@@ -1,6 +1,6 @@
 resource "aws_instance" "airflow" {
   # FIXME: Use a specialised airflow AMI
-  ami                    = "${data.aws_ami.amazon_linux_2.image_id}"
+  ami                    = "${data.aws_ami.training_airflow.image_id}"
   instance_type          = "${var.instance_type}"
   vpc_security_group_ids = ["${aws_security_group.airflow.id}"]
   subnet_id              = "${var.subnet_ids[0]}"
@@ -15,8 +15,8 @@ resource "aws_instance" "airflow" {
   )}"
 
   # TODO: Remove this once we have dedicated airflow AMI
-  lifecycle {
-    ignore_changes = ["ami"]
-  }
+//  lifecycle {
+//    ignore_changes = ["ami"]
+//  }
 }
 
