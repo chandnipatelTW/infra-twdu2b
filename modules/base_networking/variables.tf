@@ -15,7 +15,3 @@ variable "private_dns_zone_name" {
   description = "Name of VPC private dns zone"
 }
 
-variable "env" {
-  description = "Environment"
-}
-
