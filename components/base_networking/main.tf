@@ -10,9 +10,9 @@ provider "aws" {
 module "training_vpc" {
   source = "../../modules/base_networking"
 
-  deployment_identifier = "data-eng-${var.cohort}${var.env}"
+  deployment_identifier = "data-eng-${var.cohort}" //data-eng-twdu2b-dev
   vpc_cidr              = "10.0.0.0/16"
-  private_dns_zone_name = "${var.cohort}${var.env}.training"
+  private_dns_zone_name = "${var.cohort}.training"
   availability_zones = [
     "${var.aws_region}a",
     "${var.aws_region}b",
