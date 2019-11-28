@@ -18,11 +18,6 @@ output "dns_zone_id" {
   value       = "${module.training_vpc.dns_zone_id}"
 }
 
-output "dns_zone_dev_id" {
-  description = "ID of the private DNS zone attached to the VPC."
-  value       = "${module.training_vpc.dns_zone_dev_id}"
-}
-
 output "vpc_default_security_group_id" {
   description = "ID of the default SG for the VPC"
   value       = "${module.training_vpc.vpc_default_security_group_id}"
