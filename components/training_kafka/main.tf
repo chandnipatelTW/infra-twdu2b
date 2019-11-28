@@ -46,3 +46,16 @@ module "training_kafka" {
   dns_zone_id               = "${data.terraform_remote_state.base_networking.dns_zone_id}"
   instance_type             = "${var.kafka["instance_type"]}"
 }
+
+module "training_kafka_dev" {
+  source = "../../modules/training_kafka"
+
+  bastion_security_group_id = "${data.terraform_remote_state.bastion.bastion_security_group_id}"
+  emr_security_group_id     = "${data.terraform_remote_state.training_emr_cluster.security_group_id}"
+  deployment_identifier     = "data-eng-${var.cohort}${var.env}"
+  vpc_id                    = "${data.terraform_remote_state.base_networking.vpc_id}"
+  subnet_id                 = "${data.terraform_remote_state.base_networking.private_subnet_ids[0]}"
+  ec2_key_pair              = "tw-dataeng-${var.cohort}"
+  dns_zone_id               = "${data.terraform_remote_state.base_networking.dns_zone_id}"
+  instance_type             = "${var.kafka["instance_type"]}"
+}
