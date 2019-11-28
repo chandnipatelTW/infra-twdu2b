@@ -21,3 +21,13 @@ resource "aws_s3_bucket" "training_data" {
     DeploymentIdentifier = "${local.deployment_identifier}"
   }
 }
+resource "aws_s3_bucket" "training_data_dev" {
+  bucket = "${local.deployment_identifier}${var.env}-training-data"
+  acl    = "private"
+
+  tags = {
+    Name                 = "${local.deployment_identifier}${var.env}-training-data"
+    Automation           = "terraform"
+    DeploymentIdentifier = "${local.deployment_identifier}${var.env}"
+  }
+}
