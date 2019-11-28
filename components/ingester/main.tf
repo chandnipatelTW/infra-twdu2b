@@ -51,3 +51,16 @@ module "ingester" {
   bastion_security_group_id = "${data.terraform_remote_state.bastion.bastion_security_group_id}"
   kafka_security_group_id   = "${data.terraform_remote_state.training_kafka.kafka_security_group_id}"
 }
+
+module "ingester_dev" {
+  source = "../../modules/ingester"
+
+  dns_zone_id               = "${data.terraform_remote_state.base_networking.dns_zone_id}"
+  instance_type             = "${var.ingester["instance_type"]}"
+  subnet_id                 = "${data.terraform_remote_state.base_networking.public_subnet_ids[0]}"
+  ec2_key_pair              = "tw-dataeng-${var.cohort}"
+  vpc_id                    = "${data.terraform_remote_state.base_networking.vpc_id}"
+  deployment_identifier     = "data-eng-${var.cohort}${var.env}"
+  bastion_security_group_id = "${data.terraform_remote_state.bastion.bastion_security_group_id}"
+  kafka_security_group_id   = "${data.terraform_remote_state.training_kafka.kafka_security_group_id}"
+}
