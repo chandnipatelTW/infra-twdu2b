@@ -8,7 +8,8 @@ provider "aws" {
 }
 
 locals {
-  deployment_identifier = "data-eng-${var.cohort}${var.env}"
+  deployment_identifier = "data-eng-${var.cohort}"
+  dev_deployment_identifier = "data-eng-${var.cohort}${var.env}"
 }
 
 resource "aws_s3_bucket" "training_data" {
@@ -22,12 +23,12 @@ resource "aws_s3_bucket" "training_data" {
   }
 }
 resource "aws_s3_bucket" "training_data_dev" {
-  bucket = "${local.deployment_identifier}${var.env}-training-data"
+  bucket = "${local.dev_deployment_identifier}-training-data"
   acl    = "private"
 
   tags = {
-    Name                 = "${local.deployment_identifier}${var.env}-training-data"
+    Name                 = "${local.dev_deployment_identifier}-training-data"
     Automation           = "terraform"
-    DeploymentIdentifier = "${local.deployment_identifier}${var.env}"
+    DeploymentIdentifier = "${local.dev_deployment_identifier}"
   }
 }
