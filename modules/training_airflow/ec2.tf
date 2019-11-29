@@ -25,7 +25,7 @@ resource "aws_instance" "airflow" {
           sudo pip install apache-airflow[postgres,jdbc]
 
           sudo chown -R ec2-user: ${AIRFLOW_HOME}
-          
+
           airflow initdb
 
           nohup airflow webserver -p 8080 -D
