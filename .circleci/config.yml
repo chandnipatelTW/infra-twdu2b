@@ -41,12 +41,12 @@ jobs:
                  ./scripts/run_terraform.sh $TRAINING_COHORT training_airflow apply -input=false -auto-approve;
 
  buildAirflowEnvironment:
-	 <<: *defaults
-	 steps:
-		 - checkout
-		 - run:
-				 command: source /okta_venv/bin/activate;
-					 ./scripts/run_terraform.sh $TRAINING_COHORT training_airflow apply -input=false -auto-approve;
+   <<: *defaults
+   steps:
+     - checkout
+     - run:
+         command: source /okta_venv/bin/activate;
+           ./scripts/run_terraform.sh $TRAINING_COHORT training_airflow apply -input=false -auto-approve;
 
 
  buildClientVPN:
@@ -112,13 +112,13 @@ workflows:
           requires:
             - approveBuildProductionEnvironment
 
-			- approveBuildAirflowEnvironment:
-					type: approval
-					requires:
-						- dummy
-			- buildAirflowEnvironment:
-					requires:
-						- approveBuildAirflowEnvironment
+      - approveBuildAirflowEnvironment:
+          type: approval
+          requires:
+            - dummy
+      - buildAirflowEnvironment:
+          requires:
+            - approveBuildAirflowEnvironment
 
       - approvebuildClientVPN:
           type: approval
