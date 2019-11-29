@@ -47,6 +47,7 @@ terraform init \
 if [[ "$ENVIRONMENT" == "DEV"  ]]; then
     if terraform workspace list | grep -q 'dev'; then
         echo ">>>>>>> Workspace Dev Exists >>>>>>>"
+        terraform workspace select dev
     else
        terraform workspace new dev; 
     fi
