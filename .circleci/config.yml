@@ -5,13 +5,14 @@ defaults: &defaults
 
 version: 2
 jobs:
- dummy:
+
+  dummy:
     <<: *defaults
     steps:
     - run:
         command: echo "hello world"
 
- firstTimeSetup:
+  firstTimeSetup:
    <<: *defaults
    steps:
    - checkout
@@ -24,13 +25,13 @@ jobs:
        command: source /okta_venv/bin/activate;
                ./scripts/create_key_pair.sh $TRAINING_COHORT$DEV_ENV;
 
- buildProductionEnvironment:
+  buildProductionEnvironment:
      <<: *defaults
      steps:
      - checkout
      - run:
          command: source /okta_venv/bin/activate;
-                ./scripts/run_terraform.sh $TRAINING_COHORT base_networking plan -var="env=$DEV_ENV";
+                ./scripts/run_terraform.sh $TRAINING_COHORT base_networking plan -var="env=$PROD_ENV";
                 ./scripts/run_terraform.sh $TRAINING_COHORT training_airflow plan -var="env=$DEV_ENV";
                 ./scripts/run_terraform.sh $TRAINING_COHORT training_kafka plan -var="env=$DEV_ENV";
                 ./scripts/run_terraform.sh $TRAINING_COHORT ingester plan -var="env=$DEV_ENV";
@@ -45,6 +46,27 @@ jobs:
                 #  ./scripts/run_terraform.sh $TRAINING_COHORT client_vpn apply -input=false -auto-approve;
                 #  ./scripts/run_terraform.sh $TRAINING_COHORT training_airflow apply -input=false -auto-approve;
 
+  buildTestEnvironment:
+      <<: *defaults
+      steps:
+      - checkout
+      - run:
+          command: source /okta_venv/bin/activate;
+                  terraform workspace new dev;
+                  ./scripts/run_terraform.sh $TRAINING_COHORT base_networking plan -var="env=$DEV_ENV";
+                  # ./scripts/run_terraform.sh $TRAINING_COHORT training_airflow plan -var="env=$DEV_ENV";
+                  # ./scripts/run_terraform.sh $TRAINING_COHORT training_kafka plan -var="env=$DEV_ENV";
+                  # ./scripts/run_terraform.sh $TRAINING_COHORT ingester plan -var="env=$DEV_ENV";
+                  # ./scripts/run_terraform.sh $TRAINING_COHORT training_bucket plan -var="env=$DEV_ENV";
+                  # ./scripts/run_terraform.sh $TRAINING_COHORT training_bucket plan -var="env=$DEV_ENV";
+                  # ./scripts/run_terraform.sh $TRAINING_COHORT base_networking plan -input=false -auto-approve -var='env=$DEV_ENV';
+                  #  ./scripts/run_terraform.sh $TRAINING_COHORT bastion apply -input=false -auto-approve;
+                  #  ./scripts/run_terraform.sh $TRAINING_COHORT training_emr_cluster apply -input=false -auto-approve -var-file=prod-env.tfvars;
+                  #  ./scripts/run_terraform.sh $TRAINING_COHORT training_kafka apply -input=false -auto-approve -var-file=prod-env.tfvars;
+                  #  ./scripts/run_terraform.sh $TRAINING_COHORT ingester apply -input=false -auto-approve -var-file=prod-env.tfvars;
+                  #  ./scripts/run_terraform.sh $TRAINING_COHORT monitoring_dashboard apply -input=false -auto-approve;
+                  #  ./scripts/run_terraform.sh $TRAINING_COHORT client_vpn apply -input=false -auto-approve;
+                  #  ./scripts/run_terraform.sh $TRAINING_COHORT training_airflow apply -input=false -auto-approve;
 #  buildClientVPN:
 #      <<: *defaults
     #  steps:
@@ -62,7 +84,7 @@ jobs:
 #                  ./scripts/build_ami.sh training_kafka ;
 #                  ./scripts/build_ami.sh training_ingester ;
 
- destroyProductionEnvironment:
+  destroyProductionEnvironment:
      <<: *defaults
      steps:
      - checkout
@@ -111,7 +133,21 @@ workflows:
       - buildAMIs:
           requires:
             - approvebuildAMIs
-
+      - approveBuildTestEnvironment:
+          type: approval
+          filters:
+            branches:
+                only:
+                    - test-env
+          requires:
+            - dummy
+      - buildTestEnvironment:
+          filters:
+            branches:
+                only:
+                    - test-env
+          requires:
+            - approveBuildTestEnvironment
       - approveBuildProductionEnvironment:
           type: approval
           filters:
