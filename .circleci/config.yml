@@ -53,7 +53,7 @@ jobs:
       - run:
           command: source /okta_venv/bin/activate;
                   ./scripts/run_terraform.sh $TRAINING_COHORT DEV base_networking apply -input=false -auto-approve -var="env=$DEV_ENV";
-                  ./scripts/run_terraform.sh $TRAINING_COHORT DEV bastion plan -var="env=$DEV_ENV";
+                  ./scripts/run_terraform.sh $TRAINING_COHORT DEV bastion apply -input=false -auto-approve -var="env=$DEV_ENV";
                   # ./scripts/run_terraform.sh $TRAINING_COHORT DEV training_bucket plan -var="env=$DEV_ENV";
                   #  ./scripts/run_terraform.sh $TRAINING_COHORT DEV training_emr_cluster plan -var="env=$DEV_ENV" -var-file=prod-env.tfvars;
                   #  ./scripts/run_terraform.sh $TRAINING_COHORT DEV training_kafka plan -var="env=$DEV_ENV" -var-file=prod-env.tfvars;
