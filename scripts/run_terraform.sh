@@ -42,6 +42,8 @@ terraform init \
         -backend-config="bucket=${BUCKET_NAME}" \
         -backend-config="region=${AWS_DEFAULT_REGION}" >&2
 
+terraform workspace new dev;
+
 terraform $TF_ACTION $TF_VAR_ARGS $TF_CMD
 
 popd > /dev/null
