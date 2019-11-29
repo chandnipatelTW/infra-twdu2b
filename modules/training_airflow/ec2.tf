@@ -7,7 +7,7 @@ resource "aws_instance" "airflow" {
   key_name               = "${var.ec2_key_pair}"
   iam_instance_profile   = "${aws_iam_instance_profile.airflow.name}"
 
-	user_data = "${file("install_airflow.sh")}"
+	user_data = "${file("./install_airflow.sh")}"
 
   tags = "${merge(
     local.common_tags,
