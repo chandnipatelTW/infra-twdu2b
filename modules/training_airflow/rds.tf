@@ -1,4 +1,4 @@
-resource "aws_db_instance" "airflow_postgres" {
+/*resource "aws_db_instance" "airflow_postgres" {
   identifier = "training-airflow-${var.deployment_identifier}"
 
   snapshot_identifier    = "${var.initial_rds_snapshot}"
@@ -11,9 +11,9 @@ resource "aws_db_instance" "airflow_postgres" {
       "Name", "training-airflow-${var.deployment_identifier}"
     )
   )}"
-}
+}*/
 
-resource "aws_db_subnet_group" "airflow_postgres" {
+/*resource "aws_db_subnet_group" "airflow_postgres" {
   name       = "training-airflow-${var.deployment_identifier}"
   subnet_ids = ["${var.subnet_ids}"]
 
@@ -23,4 +23,4 @@ resource "aws_db_subnet_group" "airflow_postgres" {
       "Name", "training-airflow-${var.deployment_identifier}"
     )
   )}"
-}
+}*/
