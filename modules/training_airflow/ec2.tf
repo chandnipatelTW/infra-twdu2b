@@ -24,7 +24,7 @@ resource "aws_instance" "airflow" {
           sudo pip install apache-airflow[crypto]
           sudo pip install apache-airflow[postgres,jdbc]
 
-          sudo chown -R ec2-user: ${AIRFLOW_HOME}
+          sudo chown -R ec2-user: /usr/local/airflow
 
           airflow initdb
 
