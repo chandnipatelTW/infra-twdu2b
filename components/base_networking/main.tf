@@ -1,5 +1,8 @@
 terraform {
-  backend "s3" {}
+  backend "s3" {
+    bucket = "mtw-dataeng-twdu2b-tfstate"
+    region = "ap-southeast-1"
+  }
 }
 
 provider "aws" {
