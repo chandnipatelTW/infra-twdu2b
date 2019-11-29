@@ -31,11 +31,11 @@ jobs:
      - checkout
      - run:
          command: source /okta_venv/bin/activate;
-                ./scripts/run_terraform.sh $TRAINING_COHORT base_networking plan -var="env=$PROD_ENV";
-                ./scripts/run_terraform.sh $TRAINING_COHORT training_airflow plan -var="env=$DEV_ENV";
-                ./scripts/run_terraform.sh $TRAINING_COHORT training_kafka plan -var="env=$DEV_ENV";
-                ./scripts/run_terraform.sh $TRAINING_COHORT ingester plan -var="env=$DEV_ENV";
-                ./scripts/run_terraform.sh $TRAINING_COHORT training_bucket plan -var="env=$DEV_ENV";
+                ./scripts/run_terraform.sh $TRAINING_COHORT PROD base_networking plan -var="env=$PROD_ENV";
+                ./scripts/run_terraform.sh $TRAINING_COHORT PROD training_airflow plan -var="env=$PROD_ENV";
+                ./scripts/run_terraform.sh $TRAINING_COHORT training_kafka plan -var="env=$PROD_ENV";
+                ./scripts/run_terraform.sh $TRAINING_COHORT ingester plan -var="env=$PROD_ENV";
+                ./scripts/run_terraform.sh $TRAINING_COHORT training_bucket plan -var="env=$PROD_ENV";
                 # ./scripts/run_terraform.sh $TRAINING_COHORT training_bucket plan -var="env=$DEV_ENV";
                 # ./scripts/run_terraform.sh $TRAINING_COHORT base_networking plan -input=false -auto-approve -var='env=$DEV_ENV';
                 #  ./scripts/run_terraform.sh $TRAINING_COHORT bastion apply -input=false -auto-approve;
@@ -53,19 +53,14 @@ jobs:
       - run:
           command: source /okta_venv/bin/activate;
                   ./scripts/run_terraform.sh $TRAINING_COHORT DEV base_networking plan -var="env=$DEV_ENV";
-                  # ./scripts/run_terraform.sh $TRAINING_COHORT training_airflow plan -var="env=$DEV_ENV";
-                  # ./scripts/run_terraform.sh $TRAINING_COHORT training_kafka plan -var="env=$DEV_ENV";
-                  # ./scripts/run_terraform.sh $TRAINING_COHORT ingester plan -var="env=$DEV_ENV";
-                  # ./scripts/run_terraform.sh $TRAINING_COHORT training_bucket plan -var="env=$DEV_ENV";
-                  # ./scripts/run_terraform.sh $TRAINING_COHORT training_bucket plan -var="env=$DEV_ENV";
-                  # ./scripts/run_terraform.sh $TRAINING_COHORT base_networking plan -input=false -auto-approve -var='env=$DEV_ENV';
-                  #  ./scripts/run_terraform.sh $TRAINING_COHORT bastion apply -input=false -auto-approve;
-                  #  ./scripts/run_terraform.sh $TRAINING_COHORT training_emr_cluster apply -input=false -auto-approve -var-file=prod-env.tfvars;
-                  #  ./scripts/run_terraform.sh $TRAINING_COHORT training_kafka apply -input=false -auto-approve -var-file=prod-env.tfvars;
-                  #  ./scripts/run_terraform.sh $TRAINING_COHORT ingester apply -input=false -auto-approve -var-file=prod-env.tfvars;
-                  #  ./scripts/run_terraform.sh $TRAINING_COHORT monitoring_dashboard apply -input=false -auto-approve;
-                  #  ./scripts/run_terraform.sh $TRAINING_COHORT client_vpn apply -input=false -auto-approve;
-                  #  ./scripts/run_terraform.sh $TRAINING_COHORT training_airflow apply -input=false -auto-approve;
+                  ./scripts/run_terraform.sh $TRAINING_COHORT DEV bastion plan -var="env=$DEV_ENV";
+                  # ./scripts/run_terraform.sh $TRAINING_COHORT DEV training_bucket plan -var="env=$DEV_ENV";
+                  #  ./scripts/run_terraform.sh $TRAINING_COHORT DEV training_emr_cluster plan -var="env=$DEV_ENV" -var-file=prod-env.tfvars;
+                  #  ./scripts/run_terraform.sh $TRAINING_COHORT DEV training_kafka plan -var="env=$DEV_ENV" -var-file=prod-env.tfvars;
+                  #  ./scripts/run_terraform.sh $TRAINING_COHORT DEV ingester plan -var="env=$DEV_ENV" -var-file=prod-env.tfvars;
+                  #  ./scripts/run_terraform.sh $TRAINING_COHORT DEV monitoring_dashboard plan -var="env=$DEV_ENV";
+                  #  ./scripts/run_terraform.sh $TRAINING_COHORT DEV client_vpn plan -var="env=$DEV_ENV";
+                  #  ./scripts/run_terraform.sh $TRAINING_COHORT DEV training_airflow plan -var="env=$DEV_ENV";
 #  buildClientVPN:
 #      <<: *defaults
     #  steps:

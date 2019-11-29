@@ -51,6 +51,9 @@ if [[ "$ENVIRONMENT" == "DEV"  ]]; then
     else
        terraform workspace new dev; 
     fi
+
+elif [[ "$ENVIRONMENT" == "PROD" ]]; then
+    terraform workspace select default
 fi
 
 terraform $TF_ACTION $TF_VAR_ARGS $TF_CMD
