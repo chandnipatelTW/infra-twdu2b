@@ -19,6 +19,8 @@ fi
 
 COHORT_NAME=$1
 shift
+ENVIRONMENT=$1
+shift
 COMPONENT_NAME=$1
 shift
 TF_ACTION=$1
@@ -42,7 +44,13 @@ terraform init \
         -backend-config="bucket=${BUCKET_NAME}" \
         -backend-config="region=${AWS_DEFAULT_REGION}" >&2
 
-terraform workspace new dev;
+if [[ "$ENVIRONMENT" == "DEV"  ]]; then
+    if terraform workspace list | grep -q 'dev'; then
+        echo ">>>>>>> Workspace Dev Exists >>>>>>>"
+    else
+       terraform workspace new dev; 
+    fi
+fi
 
 terraform $TF_ACTION $TF_VAR_ARGS $TF_CMD
 
