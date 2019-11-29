@@ -8,11 +8,12 @@ provider "aws" {
 }
 
 module "training_vpc" {
+  count = 2
   source = "../../modules/base_networking"
 
-  deployment_identifier = "data-eng-${var.cohort}" //data-eng-twdu2b-dev
+  deployment_identifier = ["data-eng-${var.cohort}", "data-eng-${var.cohort}${var.env}"] //data-eng-twdu2b
   vpc_cidr              = "10.0.0.0/16"
-  private_dns_zone_name = "${var.cohort}.training"
+  private_dns_zone_name = ["${var.cohort}.training", "${var.cohort}${var.env}.training"]
   availability_zones = [
     "${var.aws_region}a",
     "${var.aws_region}b",
@@ -20,15 +21,15 @@ module "training_vpc" {
   ]
 }
 
-module "training_vpc_dev" {
-  source = "../../modules/base_networking"
+# module "training_vpc_dev" {
+#   source = "../../modules/base_networking"
 
-  deployment_identifier = "data-eng-${var.cohort}${var.env}" //data-eng-twdu2b-dev
-  vpc_cidr              = "10.0.0.0/16"
-  private_dns_zone_name = "${var.cohort}${var.env}.training"
-  availability_zones = [
-    "${var.aws_region}a",
-    "${var.aws_region}b",
-    "${var.aws_region}c"
-  ]
-}
+#   deployment_identifier = "data-eng-${var.cohort}${var.env}" //data-eng-twdu2b-dev
+#   vpc_cidr              = "10.0.0.0/16"
+#   private_dns_zone_name = "${var.cohort}${var.env}.training"
+#   availability_zones = [
+#     "${var.aws_region}a",
+#     "${var.aws_region}b",
+#     "${var.aws_region}c"
+#   ]
+# }
