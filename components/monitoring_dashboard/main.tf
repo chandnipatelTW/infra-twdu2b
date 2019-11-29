@@ -11,7 +11,7 @@ provider "aws" {
 data "terraform_remote_state" "training_kafka" {
   backend = "s3"
   config {
-    key    = "training_kafka.tfstate"
+    key    = "env:/dev/training_kafka.tfstate"
     bucket = "tw-dataeng-${var.cohort}-tfstate"
     region = "${var.aws_region}"
   }
@@ -20,7 +20,7 @@ data "terraform_remote_state" "training_kafka" {
 data "terraform_remote_state" "training_emr_cluster" {
   backend = "s3"
   config {
-    key    = "training_emr_cluster.tfstate"
+    key    = "env:/dev/training_emr_cluster.tfstate"
     bucket = "tw-dataeng-${var.cohort}-tfstate"
     region = "${var.aws_region}"
   }
@@ -29,7 +29,7 @@ data "terraform_remote_state" "training_emr_cluster" {
 data "terraform_remote_state" "ingester" {
   backend = "s3"
   config {
-    key    = "ingester.tfstate"
+    key    = "env:/dev/ingester.tfstate"
     bucket = "tw-dataeng-${var.cohort}-tfstate"
     region = "${var.aws_region}"
   }

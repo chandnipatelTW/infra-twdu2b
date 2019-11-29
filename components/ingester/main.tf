@@ -10,7 +10,7 @@ provider "aws" {
 data "terraform_remote_state" "base_networking" {
   backend = "s3"
   config {
-    key    = "base_networking.tfstate"
+    key    = "env:/dev/base_networking.tfstate"
     bucket = "tw-dataeng-${var.cohort}-tfstate"
     region = "${var.aws_region}"
   }
@@ -19,7 +19,7 @@ data "terraform_remote_state" "base_networking" {
 data "terraform_remote_state" "bastion" {
   backend = "s3"
   config {
-    key    = "bastion.tfstate"
+    key    = "env:/dev/bastion.tfstate"
     bucket = "tw-dataeng-${var.cohort}-tfstate"
     region = "${var.aws_region}"
   }
@@ -28,7 +28,7 @@ data "terraform_remote_state" "bastion" {
 data "terraform_remote_state" "training_kafka" {
   backend = "s3"
   config {
-    key    = "training_kafka.tfstate"
+    key    = "env:/dev/training_kafka.tfstate"
     bucket = "tw-dataeng-${var.cohort}-tfstate"
     region = "${var.aws_region}"
   }
@@ -45,22 +45,10 @@ module "ingester" {
   dns_zone_id               = "${data.terraform_remote_state.base_networking.dns_zone_id}"
   instance_type             = "${var.ingester["instance_type"]}"
   subnet_id                 = "${data.terraform_remote_state.base_networking.public_subnet_ids[0]}"
-  ec2_key_pair              = "tw-dataeng-${var.cohort}"
-  vpc_id                    = "${data.terraform_remote_state.base_networking.vpc_id}"
-  deployment_identifier     = "data-eng-${var.cohort}"
-  bastion_security_group_id = "${data.terraform_remote_state.bastion.bastion_security_group_id}"
-  kafka_security_group_id   = "${data.terraform_remote_state.training_kafka.kafka_security_group_id}"
-}
-
-module "ingester_dev" {
-  source = "../../modules/ingester"
-
-  dns_zone_id               = "${data.terraform_remote_state.base_networking.dns_zone_id}"
-  instance_type             = "${var.ingester["instance_type"]}"
-  subnet_id                 = "${data.terraform_remote_state.base_networking.public_subnet_ids[0]}"
-  ec2_key_pair              = "tw-dataeng-${var.cohort}"
+  ec2_key_pair              = "tw-dataeng-${var.cohort}${var.env}"
   vpc_id                    = "${data.terraform_remote_state.base_networking.vpc_id}"
   deployment_identifier     = "data-eng-${var.cohort}${var.env}"
   bastion_security_group_id = "${data.terraform_remote_state.bastion.bastion_security_group_id}"
   kafka_security_group_id   = "${data.terraform_remote_state.training_kafka.kafka_security_group_id}"
 }
+

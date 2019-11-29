@@ -10,7 +10,7 @@ provider "aws" {
 data "terraform_remote_state" "base_networking" {
   backend = "s3"
   config {
-    key    = "base_networking.tfstate"
+    key    = "env:/dev/base_networking.tfstate"
     bucket = "tw-dataeng-${var.cohort}-tfstate"
     region = "${var.aws_region}"
   }
@@ -19,7 +19,7 @@ data "terraform_remote_state" "base_networking" {
 data "terraform_remote_state" "bastion" {
   backend = "s3"
   config {
-    key    = "bastion.tfstate"
+    key    = "env:/dev/bastion.tfstate"
     bucket = "tw-dataeng-${var.cohort}-tfstate"
     region = "${var.aws_region}"
   }
@@ -28,8 +28,8 @@ data "terraform_remote_state" "bastion" {
 module "training_cluster" {
   source = "../../modules/training_emr_cluster"
 
-  deployment_identifier     = "data-eng-${var.cohort}-${var.env}"
-  ec2_key_pair              = "tw-dataeng-${var.cohort}"
+  deployment_identifier     = "data-eng-${var.cohort}${var.env}"
+  ec2_key_pair              = "tw-dataeng-${var.cohort}${var.env}"
   vpc_id                    = "${data.terraform_remote_state.base_networking.vpc_id}"
   subnet_id                 = "${data.terraform_remote_state.base_networking.private_subnet_ids[0]}"
   dns_zone_id               = "${data.terraform_remote_state.base_networking.dns_zone_id}"
