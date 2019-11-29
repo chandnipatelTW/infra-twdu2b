@@ -7,11 +7,11 @@ resource "aws_instance" "airflow" {
   key_name               = "${var.ec2_key_pair}"
   iam_instance_profile   = "${aws_iam_instance_profile.airflow.name}"
 
-  user_data = << EOF
-      #! /bin/bash
-      pwd
-      ls -al
-      EOF
+  user_data = <<EOF
+          #! /bin/bash
+          pwd
+          ls -al
+  EOF
 
   tags = "${merge(
     local.common_tags,
