@@ -11,7 +11,7 @@ data "terraform_remote_state" "base_networking" {
   backend = "s3"
   config {
     key    = "env:/dev/base_networking.tfstate"
-    bucket = "tw-dataeng-${var.cohort}${var.env}-tfstate"
+    bucket = "tw-dataeng-${var.cohort}-tfstate"
     region = "${var.aws_region}"
   }
 }
