@@ -24,4 +24,5 @@ module "client_vpn" {
   cohort                = "${var.cohort}"
   client_cidr_block     = "10.10.0.0/16"
   dns_servers           = "${data.terraform_remote_state.base_networking.resolver_inbound_dns_ips}"
+  env                   = "${var.env}"
 }
