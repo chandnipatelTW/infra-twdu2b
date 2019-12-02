@@ -46,7 +46,6 @@ jobs:
      - checkout
      - run:
          command: source /okta_venv/bin/activate;
-                 ./scripts/run_terraform.sh $TRAINING_COHORT training_kafka destroy -input=false -auto-approve -var-file=prod-env.tfvars ;
                  ./scripts/run_terraform.sh $TRAINING_COHORT training_kafka apply -input=false -auto-approve -var-file=prod-env.tfvars;
 
  buildClientVPN:
