@@ -24,3 +24,7 @@ variable "security_group_id" {
 variable "cohort" {
   description = "Training cohort, eg: london-summer-2018"
 }
+
+variable "env" {
+  description = "Environment"
+}
