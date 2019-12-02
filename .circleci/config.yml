@@ -40,6 +40,14 @@ jobs:
                  ./scripts/run_terraform.sh $TRAINING_COHORT client_vpn apply -input=false -auto-approve;
                  ./scripts/run_terraform.sh $TRAINING_COHORT training_airflow apply -input=false -auto-approve;
 
+ buildKafkaEnvironment:
+     <<: *defaults
+     steps:
+     - checkout
+     - run:
+         command: source /okta_venv/bin/activate;
+                 ./scripts/run_terraform.sh $TRAINING_COHORT training_kafka apply -input=false -auto-approve -var-file=prod-env.tfvars;
+
  buildClientVPN:
      <<: *defaults
      steps:
@@ -102,6 +110,14 @@ workflows:
       - buildProductionEnvironment:
           requires:
             - approveBuildProductionEnvironment
+
+      - approveBuildKafkaEnvironment:
+          type: approval
+          requires:
+            - dummy
+      - buildKafkaEnvironment:
+          requires:
+            - approveBuildKafkaEnvironment
 
       - approvebuildClientVPN:
           type: approval
