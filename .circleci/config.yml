@@ -23,14 +23,21 @@ jobs:
    - run:
        command: source /okta_venv/bin/activate;
 
-
- planBuildProductionEnvironment:
+ planProductionEnvironment:
      <<: *defaults
      steps:
      - checkout
      - run:
          command: source /okta_venv/bin/activate;
-                  ./scripts/run_terraform.sh $TRAINING_COHORT base_networking plan; 
+                  ./scripts/run_terraform.sh $TRAINING_COHORT base_networking plan;
+                  ./scripts/run_terraform.sh $TRAINING_COHORT bastion plan;
+                  ./scripts/run_terraform.sh $TRAINING_COHORT training_bucket plan;
+                  ./scripts/run_terraform.sh $TRAINING_COHORT training_emr_cluster plan;
+                  ./scripts/run_terraform.sh $TRAINING_COHORT training_kafka plan;
+                  ./scripts/run_terraform.sh $TRAINING_COHORT ingester plan;
+                  ./scripts/run_terraform.sh $TRAINING_COHORT monitoring_dashboard plan;
+                  ./scripts/run_terraform.sh $TRAINING_COHORT client_vpn plan;
+                  ./scripts/run_terraform.sh $TRAINING_COHORT training_airflow plan;
 
  buildProductionEnvironment:
      <<: *defaults
@@ -39,6 +46,13 @@ jobs:
      - run:
          command: source /okta_venv/bin/activate;
 
+ planKafkaEnvironment:
+     <<: *defaults
+     steps:
+     - checkout
+     - run:
+         command: source /okta_venv/bin/activate;
+                 ./scripts/run_terraform.sh $TRAINING_COHORT training_kafka plan;
 
  buildKafkaEnvironment:
      <<: *defaults
@@ -46,6 +60,7 @@ jobs:
      - checkout
      - run:
          command: source /okta_venv/bin/activate;
+                #  ./scripts/run_terraform.sh $TRAINING_COHORT training_kafka apply -input=false -auto-approve -var-file=prod-env.tfvars;
 
  buildClientVPN:
      <<: *defaults
@@ -106,7 +121,7 @@ workflows:
                 only:
                     - infra-plan-stage
 
-      - approvePlanBuildProductionEnvironment:
+      - approvePlanProductionEnvironment:
           type: approval
           requires:
             - dummy
@@ -115,9 +130,9 @@ workflows:
                 only:
                     - infra-plan-stage
 
-      - planBuildProductionEnvironment:
+      - planProductionEnvironment:
           requires:
-            - approvePlanBuildProductionEnvironment
+            - approvePlanProductionEnvironment
           filters:
             branches:
                 only:
@@ -126,7 +141,7 @@ workflows:
       - approveBuildProductionEnvironment:
           type: approval
           requires:
-            - planBuildProductionEnvironment
+            - planProductionEnvironment
           filters:
             branches:
                 only:
@@ -140,10 +155,27 @@ workflows:
                 only:
                     - infra-plan-stage
 
-      - approveBuildKafkaEnvironment:
+      - approvePlanKafkaEnvironment:
           type: approval
           requires:
             - dummy
+          filters:
+            branches:
+                only:
+                    - infra-plan-stage
+
+      - planKafkaEnvironment:
+          requires:
+            - approvePlanKafkaEnvironment
+          filters:
+            branches:
+                only:
+                    - infra-plan-stage
+
+      - approveBuildKafkaEnvironment:
+          type: approval
+          requires:
+            - planKafkaEnvironment
           filters:
             branches:
                 only:
