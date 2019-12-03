@@ -124,147 +124,79 @@ workflows:
           type: approval
           requires:
             - dummy
-          filters:
-            branches:
-                only:
-                    - infra-plan-stage
+
       - firstTimeSetup:
           requires:
             - approvefirstTimeSetup
-          filters:
-            branches:
-                only:
-                    - infra-plan-stage
 
       - approvebuildAMIs:
           type: approval
           requires:
             - dummy
-          filters:
-            branches:
-                only:
-                    - infra-plan-stage
+
       - buildAMIs:
           requires:
             - approvebuildAMIs
-          filters:
-            branches:
-                only:
-                    - infra-plan-stage
 
       - approvePlanProductionEnvironment:
           type: approval
           requires:
             - dummy
-          filters:
-            branches:
-                only:
-                    - infra-plan-stage
 
       - planProductionEnvironment:
           requires:
             - approvePlanProductionEnvironment
-          filters:
-            branches:
-                only:
-                    - infra-plan-stage
 
       - approveBuildProductionEnvironment:
           type: approval
           requires:
             - planProductionEnvironment
-          filters:
-            branches:
-                only:
-                    - infra-plan-stage
 
       - buildProductionEnvironment:
           requires:
             - approveBuildProductionEnvironment
-          filters:
-            branches:
-                only:
-                    - infra-plan-stage
 
       - approvePlanKafkaEnvironment:
           type: approval
           requires:
             - dummy
-          filters:
-            branches:
-                only:
-                    - infra-plan-stage
 
       - planKafkaEnvironment:
           requires:
             - approvePlanKafkaEnvironment
-          filters:
-            branches:
-                only:
-                    - infra-plan-stage
 
       - approveBuildKafkaEnvironment:
           type: approval
           requires:
             - planKafkaEnvironment
-          filters:
-            branches:
-                only:
-                    - infra-plan-stage
+
       - buildKafkaEnvironment:
           requires:
             - approveBuildKafkaEnvironment
-          filters:
-            branches:
-                only:
-                    - infra-plan-stage
 
       - approvePlanClientVPN:
           type: approval
           requires:
             - dummy
-          filters:
-            branches:
-                only:
-                    - infra-plan-stage
 
       - planClientVPN:
           requires:
             - approvePlanClientVPN
-          filters:
-            branches:
-                only:
-                    - infra-plan-stage
 
       - approvebuildClientVPN:
           type: approval
           requires:
             - planClientVPN
-          filters:
-            branches:
-                only:
-                    - infra-plan-stage
+
       - buildClientVPN:
           requires:
             - approvebuildClientVPN
-          filters:
-            branches:
-                only:
-                    - infra-plan-stage
 
       - approveDestroyProductionEnvironment:
           type: approval
           requires:
             - dummy
-          filters:
-            branches:
-                only:
-                    - infra-plan-stage
 
       - destroyProductionEnvironment:
           requires:
             - approveDestroyProductionEnvironment
-          filters:
-            branches:
-                only:
-                    - infra-plan-stage
