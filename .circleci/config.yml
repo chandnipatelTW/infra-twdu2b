@@ -32,6 +32,15 @@ jobs:
    - run:
        command: source /okta_venv/bin/activate;
 
+
+ planBuildProductionEnvironment:
+     <<: *defaults
+     steps:
+     - checkout
+     - run:
+         command: source /okta_venv/bin/activate;
+                  ./scripts/run_terraform.sh $TRAINING_COHORT base_networking plan; 
+
  buildProductionEnvironment:
      <<: *defaults
      steps:
@@ -113,13 +122,24 @@ workflows:
             branches:
                 only:
                     - infra-plan-stage
-      - buildProductionEnvironment:
+
+      - planBuildProductionEnvironment:
+          type: approval
           requires:
             - approveBuildProductionEnvironment
           filters:
             branches:
                 only:
                     - infra-plan-stage
+
+      - buildProductionEnvironment:
+          requires:
+            - planBuildProductionEnvironment
+          filters:
+            branches:
+                only:
+                    - infra-plan-stage
+
       - approveBuildKafkaEnvironment:
           type: approval
           requires:
