@@ -52,7 +52,7 @@ jobs:
      - checkout
      - run:
          command: source /okta_venv/bin/activate;
-                 ./scripts/run_terraform.sh $TRAINING_COHORT training_kafka plan;
+                  ./scripts/run_terraform.sh $TRAINING_COHORT training_kafka plan;
 
  buildKafkaEnvironment:
      <<: *defaults
@@ -62,12 +62,21 @@ jobs:
          command: source /okta_venv/bin/activate;
                 #  ./scripts/run_terraform.sh $TRAINING_COHORT training_kafka apply -input=false -auto-approve -var-file=prod-env.tfvars;
 
+ planClientVPN:
+     <<: *defaults
+     steps:
+     - checkout
+     - run:
+         command: source /okta_venv/bin/activate;
+                  ./scripts/run_terraform.sh $TRAINING_COHORT client_vpn plan;
+
  buildClientVPN:
      <<: *defaults
      steps:
      - checkout
      - run:
          command: source /okta_venv/bin/activate;
+                #   ./scripts/run_terraform.sh $TRAINING_COHORT client_vpn apply -input=false -auto-approve;
 
  buildAMIs:
      <<: *defaults
@@ -187,10 +196,28 @@ workflows:
             branches:
                 only:
                     - infra-plan-stage
-      - approvebuildClientVPN:
+
+      - approvePlanClientVPN:
           type: approval
           requires:
             - dummy
+          filters:
+            branches:
+                only:
+                    - infra-plan-stage
+
+      - planClientVPN:
+          requires:
+            - approvePlanClientVPN
+          filters:
+            branches:
+                only:
+                    - infra-plan-stage
+
+      - approvebuildClientVPN:
+          type: approval
+          requires:
+            - planClientVPN
           filters:
             branches:
                 only:
@@ -202,6 +229,7 @@ workflows:
             branches:
                 only:
                     - infra-plan-stage
+
       - approveDestroyProductionEnvironment:
           type: approval
           requires:
