@@ -9,8 +9,7 @@ jobs:
     <<: *defaults
     steps:
     - run:
-        command: echo "Run terraform plan";
-                 source /okta_venv/bin/activate;
+        command: source /okta_venv/bin/activate;
                  ./scripts/run_terraform.sh $TRAINING_COHORT base_networking plan; 
                  ./scripts/run_terraform.sh $TRAINING_COHORT bastion plan;
                  ./scripts/run_terraform.sh $TRAINING_COHORT training_bucket plan;
@@ -29,10 +28,8 @@ jobs:
        command: source /okta_venv/bin/activate;
    - run:
        command: source /okta_venv/bin/activate;
-               ./scripts/create_tf_state_bucket.sh $TRAINING_COHORT;
    - run:
        command: source /okta_venv/bin/activate;
-               ./scripts/create_key_pair.sh $TRAINING_COHORT;
 
  buildProductionEnvironment:
      <<: *defaults
@@ -48,7 +45,6 @@ jobs:
      - checkout
      - run:
          command: source /okta_venv/bin/activate;
-                 ./scripts/run_terraform.sh $TRAINING_COHORT training_kafka apply -input=false -auto-approve -var-file=prod-env.tfvars;
 
  buildClientVPN:
      <<: *defaults
