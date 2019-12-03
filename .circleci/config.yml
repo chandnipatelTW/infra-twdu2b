@@ -10,7 +10,7 @@ jobs:
     steps:
     - checkout
     - run:
-        command: echo "Welcome to infra pipeline!"
+        command: echo "Welcome to infra pipeline!";
 
  firstTimeSetup:
    <<: *defaults
