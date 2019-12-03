@@ -10,16 +10,7 @@ jobs:
     steps:
     - checkout
     - run:
-        command: source /okta_venv/bin/activate;
-                 ./scripts/run_terraform.sh $TRAINING_COHORT base_networking plan; 
-                 ./scripts/run_terraform.sh $TRAINING_COHORT bastion plan;
-                 ./scripts/run_terraform.sh $TRAINING_COHORT training_bucket plan;
-                 ./scripts/run_terraform.sh $TRAINING_COHORT training_emr_cluster plan;
-                 ./scripts/run_terraform.sh $TRAINING_COHORT training_kafka plan;
-                 ./scripts/run_terraform.sh $TRAINING_COHORT ingester plan;
-                 ./scripts/run_terraform.sh $TRAINING_COHORT monitoring_dashboard plan;
-                 ./scripts/run_terraform.sh $TRAINING_COHORT client_vpn plan;
-                 ./scripts/run_terraform.sh $TRAINING_COHORT training_airflow plan;
+        command: echo "Welcome to infra pipeline!"
 
  firstTimeSetup:
    <<: *defaults
@@ -114,7 +105,8 @@ workflows:
             branches:
                 only:
                     - infra-plan-stage
-      - approveBuildProductionEnvironment:
+
+      - approvePlanBuildProductionEnvironment:
           type: approval
           requires:
             - dummy
@@ -124,9 +116,17 @@ workflows:
                     - infra-plan-stage
 
       - planBuildProductionEnvironment:
+          requires:
+            - approvePlanBuildProductionEnvironment
+          filters:
+            branches:
+                only:
+                    - infra-plan-stage
+
+      - approveBuildProductionEnvironment:
           type: approval
           requires:
-            - approveBuildProductionEnvironment
+            - planBuildProductionEnvironment
           filters:
             branches:
                 only:
@@ -134,7 +134,7 @@ workflows:
 
       - buildProductionEnvironment:
           requires:
-            - planBuildProductionEnvironment
+            - approveBuildProductionEnvironment
           filters:
             branches:
                 only:
