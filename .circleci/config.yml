@@ -197,6 +197,6 @@ workflows:
     #       requires:
     #         - dummy
 
-      - destroyProductionEnvironment:
-          requires:
-            - approveDestroyProductionEnvironment
+    #   - destroyProductionEnvironment:
+    #       requires:
+    #         - approveDestroyProductionEnvironment
