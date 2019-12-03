@@ -84,6 +84,9 @@ jobs:
      - checkout
      - run:
          command: source /okta_venv/bin/activate;
+                #   ./scripts/build_ami.sh training_kafka;
+                #   ./scripts/build_ami.sh training_ingester;
+                #   ./scripts/build_ami.sh training_airflow;
 
  destroyProductionEnvironment:
      <<: *defaults
@@ -238,6 +241,7 @@ workflows:
             branches:
                 only:
                     - infra-plan-stage
+                    
       - destroyProductionEnvironment:
           requires:
             - approveDestroyProductionEnvironment
