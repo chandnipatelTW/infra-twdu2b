@@ -152,9 +152,9 @@ workflows:
           requires:
             - planProductionEnvironment
 
-#      - buildProductionEnvironment:
-#          requires:
-#            - approveBuildProductionEnvironment
+      - buildProductionEnvironment:
+          requires:
+            - approveBuildProductionEnvironment
 
       - approvePlanKafkaEnvironment:
           type: approval
