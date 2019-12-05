@@ -154,77 +154,77 @@ workflows:
           requires:
             - approvebuildAMIs
 
-    - approvePlanEMREnvironment:
-        type: approval
-        requires:
-          - dummy
+      - approvePlanEMREnvironment:
+          type: approval
+          requires:
+            - dummy
 
-          - planEMREnvironment:
-              requires:
-                - approvePlanEMREnvironment
+      - planEMREnvironment:
+          requires:
+            - approvePlanEMREnvironment
 
-          - approveBuildEMREnvironment:
-              type: approval
-              requires:
-                - planEMREnvironment
+      - approveBuildEMREnvironment:
+          type: approval
+          requires:
+            - planEMREnvironment
 
-          - buildEMREnvironment:
-              requires:
-                - approveBuildEMREnvironment
+      - buildEMREnvironment:
+          requires:
+            - approveBuildEMREnvironment
 
-          - approvePlanProductionEnvironment:
-              type: approval
-              requires:
-                - dummy
+      - approvePlanProductionEnvironment:
+          type: approval
+          requires:
+            - dummy
 
-          - planProductionEnvironment:
-              requires:
-                - approvePlanProductionEnvironment
+      - planProductionEnvironment:
+          requires:
+            - approvePlanProductionEnvironment
 
-          - approveBuildProductionEnvironment:
-              type: approval
-              requires:
-                - planProductionEnvironment
+      - approveBuildProductionEnvironment:
+          type: approval
+          requires:
+            - planProductionEnvironment
 
-          - buildProductionEnvironment:
-              requires:
-                - approveBuildProductionEnvironment
+      - buildProductionEnvironment:
+          requires:
+            - approveBuildProductionEnvironment
 
-          - approvePlanKafkaEnvironment:
-              type: approval
-              requires:
-                - dummy
+      - approvePlanKafkaEnvironment:
+          type: approval
+          requires:
+            - dummy
 
-          - planKafkaEnvironment:
-              requires:
-                - approvePlanKafkaEnvironment
+      - planKafkaEnvironment:
+          requires:
+            - approvePlanKafkaEnvironment
 
-          - approveBuildKafkaEnvironment:
-              type: approval
-              requires:
-                - planKafkaEnvironment
+      - approveBuildKafkaEnvironment:
+          type: approval
+          requires:
+            - planKafkaEnvironment
 
-          - buildKafkaEnvironment:
-              requires:
-                - approveBuildKafkaEnvironment
+      - buildKafkaEnvironment:
+          requires:
+            - approveBuildKafkaEnvironment
 
-          - approvePlanClientVPN:
-              type: approval
-              requires:
-                - dummy
+      - approvePlanClientVPN:
+          type: approval
+          requires:
+            - dummy
 
-          - planClientVPN:
-              requires:
-                - approvePlanClientVPN
+      - planClientVPN:
+          requires:
+            - approvePlanClientVPN
 
-          - approvebuildClientVPN:
-              type: approval
-              requires:
-                - planClientVPN
+      - approvebuildClientVPN:
+          type: approval
+          requires:
+            - planClientVPN
 
-          - buildClientVPN:
-              requires:
-                - approvebuildClientVPN
+      - buildClientVPN:
+          requires:
+            - approvebuildClientVPN
 
       #   - approveDestroyProductionEnvironment:
       #       type: approval
