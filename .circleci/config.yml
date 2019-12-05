@@ -41,6 +41,22 @@ jobs:
                   ./scripts/run_terraform.sh $TRAINING_COHORT client_vpn plan;
                   ./scripts/run_terraform.sh $TRAINING_COHORT training_airflow plan;
 
+ planEMREnvironment:
+   <<: *defaults
+   steps:
+     - checkout
+     - run:
+         command: source /okta_venv/bin/activate;
+           ./scripts/run_terraform.sh $TRAINING_COHORT training_emr_cluster plan;
+
+ buildEMREnvironment:
+   <<: *defaults
+   steps:
+     - checkout
+     - run:
+         command: source /okta_venv/bin/activate;
+           ./scripts/run_terraform.sh $TRAINING_COHORT training_emr_cluster apply -input=false -auto-approve -var-file=prod-env.tfvars;
+
  buildProductionEnvironment:
      <<: *defaults
      steps:
@@ -137,6 +153,28 @@ workflows:
       - buildAMIs:
           requires:
             - approvebuildAMIs
+
+
+
+  - approvePlanEMREnvironment:
+      type: approval
+      requires:
+        - dummy
+
+      - planEMREnvironment:
+          requires:
+            - approvePlanEMREnvironment
+
+      - approveBuildEMREnvironment:
+          type: approval
+          requires:
+            - planEMREnvironment
+
+      - buildEMREnvironment:
+          requires:
+            - approveBuildEMREnvironment
+
+
 
       - approvePlanProductionEnvironment:
           type: approval
