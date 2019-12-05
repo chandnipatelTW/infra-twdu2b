@@ -1,119 +1,119 @@
 defaults: &defaults
   docker:
-  - image: twdu2b/infrabox
+    - image: twdu2b/infrabox
   working_directory: /home/circleci/project
 
 version: 2
 jobs:
- dummy:
+  dummy:
     <<: *defaults
     steps:
-    - checkout
-    - run:
-        command: echo "Welcome to infra pipeline!";
+      - checkout
+      - run:
+          command: echo "Welcome to infra pipeline!";
 
- firstTimeSetup:
-   <<: *defaults
-   steps:
-   - checkout
-   - run:
-       command: source /okta_venv/bin/activate;
-   - run:
-       command: source /okta_venv/bin/activate;
-               ./scripts/create_tf_state_bucket.sh $TRAINING_COHORT;
-   - run:
-       command: source /okta_venv/bin/activate;
-               ./scripts/create_key_pair.sh $TRAINING_COHORT;
+  firstTimeSetup:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          command: source /okta_venv/bin/activate;
+      - run:
+          command: source /okta_venv/bin/activate;
+            ./scripts/create_tf_state_bucket.sh $TRAINING_COHORT;
+      - run:
+          command: source /okta_venv/bin/activate;
+            ./scripts/create_key_pair.sh $TRAINING_COHORT;
 
- planProductionEnvironment:
-     <<: *defaults
-     steps:
-     - checkout
-     - run:
-         command: source /okta_venv/bin/activate;
-                  ./scripts/run_terraform.sh $TRAINING_COHORT base_networking plan;
-                  ./scripts/run_terraform.sh $TRAINING_COHORT bastion plan;
-                  ./scripts/run_terraform.sh $TRAINING_COHORT training_bucket plan;
-                  ./scripts/run_terraform.sh $TRAINING_COHORT training_emr_cluster plan;
-                  ./scripts/run_terraform.sh $TRAINING_COHORT training_kafka plan;
-                  ./scripts/run_terraform.sh $TRAINING_COHORT ingester plan;
-                  ./scripts/run_terraform.sh $TRAINING_COHORT monitoring_dashboard plan;
-                  ./scripts/run_terraform.sh $TRAINING_COHORT client_vpn plan;
-                  ./scripts/run_terraform.sh $TRAINING_COHORT training_airflow plan;
+  planProductionEnvironment:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          command: source /okta_venv/bin/activate;
+            ./scripts/run_terraform.sh $TRAINING_COHORT base_networking plan;
+            ./scripts/run_terraform.sh $TRAINING_COHORT bastion plan;
+            ./scripts/run_terraform.sh $TRAINING_COHORT training_bucket plan;
+            ./scripts/run_terraform.sh $TRAINING_COHORT training_emr_cluster plan;
+            ./scripts/run_terraform.sh $TRAINING_COHORT training_kafka plan;
+            ./scripts/run_terraform.sh $TRAINING_COHORT ingester plan;
+            ./scripts/run_terraform.sh $TRAINING_COHORT monitoring_dashboard plan;
+            ./scripts/run_terraform.sh $TRAINING_COHORT client_vpn plan;
+            ./scripts/run_terraform.sh $TRAINING_COHORT training_airflow plan;
 
- planEMREnvironment:
-   <<: *defaults
-   steps:
-     - checkout
-     - run:
-         command: source /okta_venv/bin/activate;
-           ./scripts/run_terraform.sh $TRAINING_COHORT training_emr_cluster plan;
+  planEMREnvironment:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          command: source /okta_venv/bin/activate;
+            ./scripts/run_terraform.sh $TRAINING_COHORT training_emr_cluster plan;
 
- buildEMREnvironment:
-   <<: *defaults
-   steps:
-     - checkout
-     - run:
-         command: source /okta_venv/bin/activate;
-           ./scripts/run_terraform.sh $TRAINING_COHORT training_emr_cluster apply -input=false -auto-approve -var-file=prod-env.tfvars;
+  buildEMREnvironment:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          command: source /okta_venv/bin/activate;
+            ./scripts/run_terraform.sh $TRAINING_COHORT training_emr_cluster apply -input=false -auto-approve -var-file=prod-env.tfvars;
 
- buildProductionEnvironment:
-     <<: *defaults
-     steps:
-     - checkout
-     - run:
-         command: source /okta_venv/bin/activate;
-                   ./scripts/run_terraform.sh $TRAINING_COHORT base_networking apply -input=false -auto-approve;
-                   ./scripts/run_terraform.sh $TRAINING_COHORT bastion apply -input=false -auto-approve;
-                   ./scripts/run_terraform.sh $TRAINING_COHORT training_bucket apply -input=false -auto-approve;
-                   ./scripts/run_terraform.sh $TRAINING_COHORT training_emr_cluster apply -input=false -auto-approve -var-file=prod-env.tfvars;
-                   ./scripts/run_terraform.sh $TRAINING_COHORT training_kafka apply -input=false -auto-approve -var-file=prod-env.tfvars;
-                   ./scripts/run_terraform.sh $TRAINING_COHORT ingester apply -input=false -auto-approve -var-file=prod-env.tfvars;
-                   ./scripts/run_terraform.sh $TRAINING_COHORT monitoring_dashboard apply -input=false -auto-approve;
-                   ./scripts/run_terraform.sh $TRAINING_COHORT client_vpn apply -input=false -auto-approve;
-                   ./scripts/run_terraform.sh $TRAINING_COHORT training_airflow apply -input=false -auto-approve;
+  buildProductionEnvironment:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          command: source /okta_venv/bin/activate;
+            ./scripts/run_terraform.sh $TRAINING_COHORT base_networking apply -input=false -auto-approve;
+            ./scripts/run_terraform.sh $TRAINING_COHORT bastion apply -input=false -auto-approve;
+            ./scripts/run_terraform.sh $TRAINING_COHORT training_bucket apply -input=false -auto-approve;
+            ./scripts/run_terraform.sh $TRAINING_COHORT training_emr_cluster apply -input=false -auto-approve -var-file=prod-env.tfvars;
+            ./scripts/run_terraform.sh $TRAINING_COHORT training_kafka apply -input=false -auto-approve -var-file=prod-env.tfvars;
+            ./scripts/run_terraform.sh $TRAINING_COHORT ingester apply -input=false -auto-approve -var-file=prod-env.tfvars;
+            ./scripts/run_terraform.sh $TRAINING_COHORT monitoring_dashboard apply -input=false -auto-approve;
+            ./scripts/run_terraform.sh $TRAINING_COHORT client_vpn apply -input=false -auto-approve;
+            ./scripts/run_terraform.sh $TRAINING_COHORT training_airflow apply -input=false -auto-approve;
 
- planKafkaEnvironment:
-     <<: *defaults
-     steps:
-     - checkout
-     - run:
-         command: source /okta_venv/bin/activate;
-                  ./scripts/run_terraform.sh $TRAINING_COHORT training_kafka plan;
+  planKafkaEnvironment:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          command: source /okta_venv/bin/activate;
+            ./scripts/run_terraform.sh $TRAINING_COHORT training_kafka plan;
 
- buildKafkaEnvironment:
-     <<: *defaults
-     steps:
-     - checkout
-     - run:
-         command: source /okta_venv/bin/activate;
-                  ./scripts/run_terraform.sh $TRAINING_COHORT training_kafka apply -input=false -auto-approve -var-file=prod-env.tfvars;
+  buildKafkaEnvironment:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          command: source /okta_venv/bin/activate;
+            ./scripts/run_terraform.sh $TRAINING_COHORT training_kafka apply -input=false -auto-approve -var-file=prod-env.tfvars;
 
- planClientVPN:
-     <<: *defaults
-     steps:
-     - checkout
-     - run:
-         command: source /okta_venv/bin/activate;
-                  ./scripts/run_terraform.sh $TRAINING_COHORT client_vpn plan;
+  planClientVPN:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          command: source /okta_venv/bin/activate;
+            ./scripts/run_terraform.sh $TRAINING_COHORT client_vpn plan;
 
- buildClientVPN:
-     <<: *defaults
-     steps:
-     - checkout
-     - run:
-         command: source /okta_venv/bin/activate;
-                  ./scripts/run_terraform.sh $TRAINING_COHORT client_vpn apply -input=false -auto-approve;
+  buildClientVPN:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          command: source /okta_venv/bin/activate;
+            ./scripts/run_terraform.sh $TRAINING_COHORT client_vpn apply -input=false -auto-approve;
 
- buildAMIs:
-     <<: *defaults
-     steps:
-     - checkout
-     - run:
-         command: source /okta_venv/bin/activate;
-                  ./scripts/build_ami.sh training_kafka;
-                  ./scripts/build_ami.sh training_ingester;
-                  ./scripts/build_ami.sh training_airflow;
+  buildAMIs:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          command: source /okta_venv/bin/activate;
+            ./scripts/build_ami.sh training_kafka;
+            ./scripts/build_ami.sh training_ingester;
+            ./scripts/build_ami.sh training_airflow;
 
 #  destroyProductionEnvironment:
 #      <<: *defaults
@@ -154,87 +154,83 @@ workflows:
           requires:
             - approvebuildAMIs
 
+    - approvePlanEMREnvironment:
+        type: approval
+        requires:
+          - dummy
 
+          - planEMREnvironment:
+              requires:
+                - approvePlanEMREnvironment
 
-  - approvePlanEMREnvironment:
-      type: approval
-      requires:
-        - dummy
+          - approveBuildEMREnvironment:
+              type: approval
+              requires:
+                - planEMREnvironment
 
-      - planEMREnvironment:
-          requires:
-            - approvePlanEMREnvironment
+          - buildEMREnvironment:
+              requires:
+                - approveBuildEMREnvironment
 
-      - approveBuildEMREnvironment:
-          type: approval
-          requires:
-            - planEMREnvironment
+          - approvePlanProductionEnvironment:
+              type: approval
+              requires:
+                - dummy
 
-      - buildEMREnvironment:
-          requires:
-            - approveBuildEMREnvironment
+          - planProductionEnvironment:
+              requires:
+                - approvePlanProductionEnvironment
 
+          - approveBuildProductionEnvironment:
+              type: approval
+              requires:
+                - planProductionEnvironment
 
+          - buildProductionEnvironment:
+              requires:
+                - approveBuildProductionEnvironment
 
-      - approvePlanProductionEnvironment:
-          type: approval
-          requires:
-            - dummy
+          - approvePlanKafkaEnvironment:
+              type: approval
+              requires:
+                - dummy
 
-      - planProductionEnvironment:
-          requires:
-            - approvePlanProductionEnvironment
+          - planKafkaEnvironment:
+              requires:
+                - approvePlanKafkaEnvironment
 
-      - approveBuildProductionEnvironment:
-          type: approval
-          requires:
-            - planProductionEnvironment
+          - approveBuildKafkaEnvironment:
+              type: approval
+              requires:
+                - planKafkaEnvironment
 
-      - buildProductionEnvironment:
-          requires:
-            - approveBuildProductionEnvironment
+          - buildKafkaEnvironment:
+              requires:
+                - approveBuildKafkaEnvironment
 
-      - approvePlanKafkaEnvironment:
-          type: approval
-          requires:
-            - dummy
+          - approvePlanClientVPN:
+              type: approval
+              requires:
+                - dummy
 
-      - planKafkaEnvironment:
-          requires:
-            - approvePlanKafkaEnvironment
+          - planClientVPN:
+              requires:
+                - approvePlanClientVPN
 
-      - approveBuildKafkaEnvironment:
-          type: approval
-          requires:
-            - planKafkaEnvironment
+          - approvebuildClientVPN:
+              type: approval
+              requires:
+                - planClientVPN
 
-      - buildKafkaEnvironment:
-          requires:
-            - approveBuildKafkaEnvironment
+          - buildClientVPN:
+              requires:
+                - approvebuildClientVPN
 
-      - approvePlanClientVPN:
-          type: approval
-          requires:
-            - dummy
+      #   - approveDestroyProductionEnvironment:
+      #       type: approval
+      #       requires:
+      #         - dummy
 
-      - planClientVPN:
-          requires:
-            - approvePlanClientVPN
-
-      - approvebuildClientVPN:
-          type: approval
-          requires:
-            - planClientVPN
-
-      - buildClientVPN:
-          requires:
-            - approvebuildClientVPN
-
-    #   - approveDestroyProductionEnvironment:
-    #       type: approval
-    #       requires:
-    #         - dummy
-
-    #   - destroyProductionEnvironment:
-    #       requires:
-    #         - approveDestroyProductionEnvironment
+      #   - destroyProductionEnvironment:
+      #       requires:
+      #         - approveDestroyProductionEnvironment
