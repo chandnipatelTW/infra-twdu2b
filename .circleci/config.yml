@@ -114,8 +114,7 @@ jobs:
             ./scripts/build_ami.sh training_kafka;
             ./scripts/build_ami.sh training_ingester;
             ./scripts/build_ami.sh training_airflow;
-
- destroyProductionEnvironment:
+destroyProductionEnvironment:
      <<: *defaults
      steps:
      - checkout
@@ -226,10 +225,10 @@ workflows:
           requires:
             - approvebuildClientVPN
 
-        - approveDestroyProductionEnvironment:
-            type: approval
-            requires:
-              - dummy
+      - approveDestroyProductionEnvironment:
+          type: approval
+          requires:
+            - dummy
 
       - destroyProductionEnvironment:
           requires:
